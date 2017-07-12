@@ -1,0 +1,11 @@
+myoptions = {
+	"isPaused": false,
+	"isRendering": false,
+	"loop": "2",
+	"autoplay": true,
+	"canvasWidth": "500",
+	"canvasHeight": "300",
+	"text1": "Rickey",
+	"text2": "WASHINGTON",
+	"text3": "MOTION GRAPHIC DESIGNER",
+}

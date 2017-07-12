@@ -1,0 +1,23 @@
+mainOptions = {
+	"caption": "Lower Third 1",
+	"delay": 1000,
+	"duration": 3000,
+	"options": [
+		[{
+			"name": "text1",
+			"caption": "Text",
+			"type": "text",
+			"value": "MDLABDESIGN",
+			"color": "#fffefe",
+			"fontSize": 24
+		}, {
+			"name": "text1",
+			"caption": "Text",
+			"type": "text",
+			"value": "creative studio",
+			"type": "text",
+			"color": "#669de7",
+			"fontSize": 24
+		}]
+	]
+}

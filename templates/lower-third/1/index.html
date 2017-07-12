@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="css/fonts/font.css">
+	<link rel="stylesheet" href="css/style.css"/>
+	<script src="../../../lib/anime.min.js"></script>
+	<script src="options.json"></script>
+</head>
+<body>
+	<div class="vba-area">
+		<canvas class="pond-logo"></canvas>
+	</div>
+
+	<!-- BUTTONS -->
+	<div id="vba-buttons" style="position: fixed; right: 20px; top: 20px;">
+		<button type="button" id="playpause" class="vba-btn">
+			Play / Pause
+		</button>
+		<button type="button" id="play" class="vba-btn">
+			Play
+		</button>
+		<button type="button" id="pause" class="vba-btn">
+			Pause
+		</button>
+		<button type="button" id="stop" class="vba-btn">
+			Stop
+		</button>
+		<button type="button" id="restart" class="vba-btn">
+			Replay
+		</button>
+	</div>
+</body>
+<script>
+	var reader = new FileReader();
+	reader.readAsText("options.json", 'UTF-8');
+	reader.onload = function(evt) {
+		console.log(evt.target.result);
+	}
+	//var timeline = anime.timeline();
+	var timeline = anime.timeline({
+		loop: 2,
+		direction: 'alternate',
+		autoplay: true
+	});
+
+	var canvasEl = document.querySelector('.pond-logo');
+	var ctx = canvasEl.getContext('2d');
+
+	function setCanvasSize() {
+		var rectObject = canvasEl.parentNode.getBoundingClientRect();
+		canvasEl.width = rectObject.width;
+		canvasEl.height = rectObject.height;
+		canvasEl.style.width = rectObject.width + 'px';
+		canvasEl.style.height = rectObject.height + 'px';
+	}
+
+	var orgX = 250, orgY = 500, orgWidth = 220;
+	var path = [
+		// start line
+		{x: orgX,	y: orgY},
+		{x: orgX,	y: orgY + 80},
+
+		{x: orgX - 200,	y: orgY + 80},
+		{x: orgX - 220,	y: orgY + 65},
+
+		{x: orgX - 220,	y: orgY + 15},
+		{x: orgX - 200,	y: orgY}
+	];
+
+	var path1 = [
+		// start line
+		{x: orgX,	y: orgY},
+		{x: orgX,	y: orgY + 80},
+
+		{x: orgX + 200,	y: orgY + 80},
+		{x: orgX + 220,	y: orgY + 65},
+
+		{x: orgX + 220,	y: orgY + 15},
+		{x: orgX + 200,	y: orgY}
+	];
+
+	function createShape(path, backColor, direction, label) {
+		var p = {};
+		p.offsetX = -220;
+		p.direction = direction;
+		p.draw = function() {
+			ctx.save();
+			// clip range
+			ctx.beginPath();
+			if (p.direction > 0) {
+				ctx.rect(orgX, orgY, orgWidth, 100);
+			} else {
+				ctx.rect(orgX - orgWidth, orgY, orgWidth, 100);
+			}
+			ctx.clip();
+			p.offsetX *= p.direction;
+			// draw polygon
+			ctx.beginPath();
+			ctx.moveTo(Math.round(p.offsetX)  + path[0].x, path[0].y);
+			for (var i = 1; i < path.length; i++) {
+				ctx.lineTo(Math.round(p.offsetX)  + path[i].x, path[i].y);
+			}
+			// complete custom shape
+			ctx.fillStyle = backColor;
+			ctx.strokeStyle = backColor;
+			ctx.stroke();
+			ctx.fill();
+			// draw text
+			ctx.font = label.fontSize + 'px Arial';
+			ctx.fillStyle = label.color;
+			// text position
+			ctx.textAlign = 'left';
+			textX = Math.round(p.offsetX) + orgX - 200;
+			if (p.direction > 0) {
+				textX += 220;
+			}
+			ctx.fillText(label.value, textX, orgY + 50);
+			ctx.closePath();
+			//
+			ctx.restore();
+		}
+		return p;
+	}
+
+	var clearCanvas = function(){
+		ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+	};
+
+	function drawTargets(anim) {
+		clearCanvas();
+		for (var i = 0; i < anim.animatables.length; i++) {
+			anim.animatables[i].target.draw();
+		}
+	}
+
+	setCanvasSize();
+
+	var shape = createShape(path, '#669de7', -1, mainOptions.options[0][0]);
+	var shape1 = createShape(path1, '#fffefe', 1, mainOptions.options[0][1]);
+
+	timeline.add({
+		targets: [shape, shape1],
+		offsetX: 0,
+		easing: 'easeOutCirc',
+		delay: mainOptions.delay,
+		duration: mainOptions.duration,
+		update: drawTargets
+	}).complete = clearCanvas;
+
+
+	document.getElementById("playpause").onclick = function() {
+		if ( mainOptions.isPaused ) {
+			return;
+		}
+		if( timeline.paused ){
+			timeline.play();
+		} else {
+			timeline.pause();
+		}
+	};
+
+	document.getElementById("play").onclick = function(){
+		if( mainOptions.isPaused ){
+			return;
+		}
+		timeline.play();
+	};
+
+	document.getElementById("pause").onclick = function(){
+		if( mainOptions.isPaused ){
+			return;
+		}
+		timeline.pause();
+	};
+
+	document.getElementById("stop").onclick = function(){
+		mainOptions.isPaused = false;
+		clearTimeout( mainOptions.timer );
+		timeline.restart();
+		timeline.pause();
+		clearCanvas();
+	};
+
+	document.getElementById("restart").onclick = function(){
+		timeline.restart();
+	};
+</script>
+</html>

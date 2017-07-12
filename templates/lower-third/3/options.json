@@ -1,0 +1,35 @@
+mainOptions = {
+	"caption": "Lower Third 2",
+	"delay": [500, 700, 1500, 1700],
+	"duration": 2500,
+	"options": [
+		[{
+			"name": "text1",
+			"caption": "Text",
+			"type": "text",
+			"value": "NO PLUGIN REQUIRED",
+			"color": "#fefffe",
+			"font": "bold 40px Arial"
+		}, {
+			"name": "text2",
+			"caption": "Text",
+			"type": "text",
+			"value": "GREAT TITLEPACK",
+			"color": "#fefffe",
+			"font": "24px Arial"
+		}],
+		[{
+			"name": "line1",
+			"caption": "Line",
+			"type": "line",
+			"color": "#7dc6c1",
+			"width": 10
+		}, {
+			"name": "line2",
+			"caption": "Line",
+			"type": "line",
+			"color": "#faaa19",
+			"width": 10
+		}]
+	]
+}

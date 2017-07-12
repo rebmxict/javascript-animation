@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'ufontscomepisodei';
+	src: url('./ufontscomepisodei.eot');
+	src: local('ufontscomepisodei'), url('./ufontscomepisodei.woff') format('woff'), url('./ufontscomepisodei.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_68542">Text with this font applied</p> */
+.fontsforweb_fontid_68542 {
+	font-family: 'ufontscomepisodei' !important;
+}
+
+/* Font downloaded from FontsForWeb.com */
